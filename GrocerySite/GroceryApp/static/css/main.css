@@ -1,0 +1,12 @@
+p {
+  color: red;
+}
+.tableREST {
+  text-align:center;
+  border: 1px solid rgb(0,0,0);             
+  float: left;
+}
+.tableHolder{
+  overflow: auto;
+  width: 100%;
+}

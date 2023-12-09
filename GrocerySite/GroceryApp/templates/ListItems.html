@@ -1,0 +1,31 @@
+<!-- myapp/templates/your_template.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Data Table</title>
+</head>
+<body>
+    <h1>Your Data Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Field 1</th>
+                <th>Field 2</th>
+                <!-- Add more headers for additional fields -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.field1 }}</td>
+                    <td>{{ item.field2 }}</td>
+                    <!-- Add more cells for additional fields -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

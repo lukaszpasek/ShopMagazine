@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/api">Magazyn</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Moje towary
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <div class="col-md-6">
+
+    <h1>Produkty</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nazwa produktu</th>
+                <th>Kod kreskowy</th>
+                <th>Jednostka</th>
+                <th>Cena netto</th>
+                <!-- Add more headers for additional fields -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.barcode }}</td>
+                    <td>{{ item.unit }}</td>
+                    <td>{{ item.price_netto }}</td>
+                    <!-- Add more cells for additional fields -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h1>Zdarzenia</h1>
+      <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nazwa produktu</th>
+                <th>Kod kreskowy</th>
+                <th>Ilość</th>
+                <th>DataDodania</th>
+                <!-- Add more headers for additional fields -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in eventData %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.barcode }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.added_at }}</td>
+                    <!-- Add more cells for additional fields -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+<script src="{% static 'js/searchExpenses.js' %}"></script>
+
+
+
+
+</script>
+
+
+
+{% endblock content %}
