@@ -7,6 +7,7 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GrocerySite.settings')
+    os.environ.setdefault("DATABASE_URL", "postgres://root:root@localhost:5432/groceryapp")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

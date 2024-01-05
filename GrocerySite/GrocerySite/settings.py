@@ -80,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'groceryapp',
-        'USERNAME': 'root',
-        'PASSWORD': '',
+        'USERNAME': 'lpas',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
     }
