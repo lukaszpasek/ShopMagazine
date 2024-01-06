@@ -7,6 +7,7 @@ class Product(models.Model):
         price_netto = models.FloatField()
         price_brutto = models.FloatField()
         barcode = models.CharField(max_length=100)
+        category = models.CharField(max_length=100)
         def __str__(self):
             return self.name
         

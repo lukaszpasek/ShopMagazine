@@ -10,3 +10,9 @@ p {
   overflow: auto;
   width: 100%;
 }
+
+.table-bordered {
+  color: red;
+  float: right;
+  margin-left: 100px;
+}

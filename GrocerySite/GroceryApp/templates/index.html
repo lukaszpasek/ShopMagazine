@@ -23,7 +23,32 @@
 </div>
 <div class="container">
   <div class="row">
-      <div class="col-md-6">
+    <div class="col-md-8">
+      <h1>Zdarzenia(Ostatnie 10 dodanych produktów)</h1>
+        <table class="table table-bordered">
+          <thead>
+              <tr>
+                  <th>Nazwa produktu</th>
+                  <th>Kod kreskowy</th>
+                  <th>Ilość</th>
+                  <th>DataDodania</th>
+                  <!-- Add more headers for additional fields -->
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in eventData %}
+                  <tr>
+                      <td>{{ item.product.name }}</td>
+                      <td>{{ item.product.barcode }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>{{ item.added_at }}</td>
+                      <!-- Add more cells for additional fields -->
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+      <div class="col-md-8">
 
     <h1>Produkty</h1>
     <table class="table table-bordered">
@@ -33,6 +58,7 @@
                 <th>Kod kreskowy</th>
                 <th>Jednostka</th>
                 <th>Cena netto</th>
+                <th>Kategoria</th>
                 <!-- Add more headers for additional fields -->
             </tr>
         </thead>
@@ -43,31 +69,7 @@
                     <td>{{ item.barcode }}</td>
                     <td>{{ item.unit }}</td>
                     <td>{{ item.price_netto }}</td>
-                    <!-- Add more cells for additional fields -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-  </div>
-  <div class="col-md-6">
-    <h1>Zdarzenia</h1>
-      <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nazwa produktu</th>
-                <th>Kod kreskowy</th>
-                <th>Ilość</th>
-                <th>DataDodania</th>
-                <!-- Add more headers for additional fields -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in eventData %}
-                <tr>
-                    <td>{{ item.product.name }}</td>
-                    <td>{{ item.product.barcode }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.added_at }}</td>
+                    <td>{{ item.category }}</td>
                     <!-- Add more cells for additional fields -->
                 </tr>
             {% endfor %}
