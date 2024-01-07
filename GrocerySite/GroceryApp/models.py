@@ -9,3 +9,8 @@ class TakeProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
     pub_date = models.DateTimeField("date published")
+
+class Sales(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+    pub_date = models.DateTimeField("date published")

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/api">Magazyn</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Moje towary
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  </div>
+</div>
+<h1>Ilość produktów na kategorie</h1>
+<canvas id="chart" width="500" height="500"></canvas>
+<script>
+   var config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          label: 'Liczba jednostek'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: false
+      }
+    };
+  let ctx = document.getElementById("chart").getContext("2d");
+  let chart = new Chart(ctx, config);
+</script>
+
+
+
+
+{% endblock content %}
