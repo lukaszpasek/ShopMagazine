@@ -168,9 +168,8 @@ def indexDostawy(request):
     total_brutto = total_brutto[:num_labels][::-1]
 
     plt.bar(labels, total_brutto, color='skyblue')
-    plt.title(f'Sprzedaż brutto[PLN] w czasie z uwzględnieniem {period}')
     plt.xlabel(f'Data ({period.capitalize()})')
-    plt.ylabel('Sprzedaż brutto[PLN]')
+    plt.ylabel('Łączna wartość zamówienia brutto[PLN]')
 
     # Save the plot to a BytesIO object
     image_stream = BytesIO()
