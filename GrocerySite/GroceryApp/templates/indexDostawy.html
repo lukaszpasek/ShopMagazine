@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/api">Magazyn</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Moje towary
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Dostawy</h1>
+      <form method="get">
+        <label for="period">Pogrupuj dane dla:</label>
+        <select name="period" id="period">
+          <option value="day" {% if period == 'day' %}selected{% endif %}>Dzień</option>
+          <option value="month" {% if period == 'month' %}selected{% endif %}>Miesiąc</option>
+          <option value="year" {% if period == 'year' %}selected{% endif %}>Rok</option>
+          <!-- Add more options as needed -->
+        </select>
+        <label for="sort_by">Sortuj według:</label>
+        <select name="sort_by" id="sort_by">
+          <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Data</option>
+          <option value="product__name" {% if sort_by == 'product__name' %}selected{% endif %}>Nazwa produktu</option>
+          <option value="total_quantity" {% if sort_by == 'total_quantity' %}selected{% endif %}>Łączna ilość sprzedanych produktów</option>
+          <option value="total_netto" {% if sort_by == 'total_netto' %}selected{% endif %}>Łączna sprzedaż netto[PLN]</option>
+          <option value="total_brutto" {% if sort_by == 'total_brutto' %}selected{% endif %}>Łączna sprzedaż brutto[PLN]</option>
+        </select>
+        <p>
+        <label for="sort_order">Kolejność sortowania</label>
+        <select name="sort_order" id="sort_order">
+          <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Rosnąco</option>
+          <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Malejąco</option>
+        </select>
+      </p>
+        <button type="submit">Aplikuj</button>
+      </form>
+        <table class="table table-bordered">
+          <thead>
+              <tr>
+                  <th>Data</th>
+                  <th>Nazwa produktu</th>
+                  <th>Łączna ilość zamówionych produktów</th>
+                  <th>Łączna wartość zamówienia netto[PLN]</th>
+                  <th>Łączna wartość zamówienia brutto[PLN]</th>
+                  <!-- Add more headers for additional fields -->
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in sales_summary_data %}
+                  <tr>
+                      <td>
+                      {% if period == 'day' %}
+                      {{ item.date|date:"Y-m-d" }}
+                      {% elif period == 'month' %}
+                      {{ item.date|date:"Y-m" }}
+                      {% elif period == 'year' %}
+                      {{ item.date|date:"Y" }}
+                      {% endif %}
+                      </td>
+                      <td>{{ item.product__name}}</td>
+                      <td>{{ item.total_quantity }}</td>
+                      <td>{{ item.total_netto }}</td>
+                      <td>{{ item.total_brutto }}</td>
+                      <!-- Add more cells for additional fields -->
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      
+    </div>
+    <div class="col-md-8">
+      {% if image_base64 %}
+      <img src="data:image/png;base64,{{ image_base64 }}" alt="Bar Chart">
+      {% else %}
+          <p>No data available for chart</p>
+      {% endif %}
+    </div>
+  </div>
+  
+</div>
+<script src="{% static 'js/searchExpenses.js' %}"></script>
+
+
+
+
+</script>
+
+
+
+{% endblock content %}
