@@ -21,8 +21,7 @@ def index(request):
 
 def indexProdukty(request):
     data = Product.objects.all()
-    eventData = TakeProduct.objects.all()[:10]
-    return render(request,'indexProdukty.html',{'data': data,'eventData': eventData})
+    return render(request,'indexProdukty.html',{'data': data})
 
 
 def indexSprzedaz(request):
@@ -61,7 +60,7 @@ def indexSprzedaz(request):
             total_netto=Sum(F('quantity') * F('product__price_netto'), output_field=FloatField()),
             total_brutto=Sum(F('quantity') * F('product__price_brutto'), output_field=FloatField())
         )
-        .order_by(order_by_arg, 'product__name')
+        .order_by(order_by_arg)
     )
 
     # Generate bar chart
@@ -193,29 +192,32 @@ def indexDostawy(request):
     return render(request, 'indexDostawy.html', context)
 
 def indexMagazyn(request):
-    labels = []
     data = []
 
-    queryset = TakeProduct.objects.all()
+    # Retrieve summary data
+    summary_data = (
+        TakeProduct.objects
+        .values('product__name','quantity','product__unit','product__price_netto','product__price_brutto')
+        .annotate(
+            total_quantity=Sum('quantity'),
+            total_netto=Sum(F('quantity') * F('product__price_netto'), output_field=FloatField()),
+            total_brutto=Sum(F('quantity') * F('product__price_brutto'), output_field=FloatField())
+        )
+        .order_by('product__name')
+    )
+    lack_products = (
+    TakeProduct.objects
+    .values('product__name','quantity','product__unit','product__price_netto','product__price_brutto')
+    .annotate(
+        total_quantity=Sum('quantity'),
+        total_netto=Sum(F('quantity') * F('product__price_netto'), output_field=FloatField()),
+        total_brutto=Sum(F('quantity') * F('product__price_brutto'), output_field=FloatField())
+    )
+    .filter(total_quantity__lt=10)
+    .order_by('total_quantity')
+)
 
-    category_sums = defaultdict(int)
-
-    # Iteruj przez produkty w queryset i sumuj ilości dla każdej kategorii
-    for product in queryset:
-        if product.product.category is not None:
-            category_sums[product.product.category] += product.quantity
-        else:
-            category_sums["Brak danych"] += product.quantity
-
-    
-    labels = list(category_sums.keys())
-    data = list(category_sums.values())
-
-    # Przekształć etykiety i dane na strukturę JSON
-    labels_json = json.dumps(labels)
-    data_json = json.dumps(data)
-
-    return render(request, 'indexMagazyn.html', {'labels': labels_json, 'data': data_json})
+    return render(request,'indexMagazyn.html',{'data': summary_data,'lack_products': lack_products})
 
 def indexDashboard(request):
     labels = []

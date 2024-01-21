@@ -10,7 +10,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="/api">Magazyn</a>
+            <a href="/admin">Magazyn</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Moje towary
@@ -23,28 +23,54 @@
 </div>
 <div class="container">
   <div class="row">
-      
     <div class="col-md-8">
-    <h1>Produkty</h1>
+      <h1>Produktu, których stan na magazynie jest mniejszy niż 10 jednostek</h1>
+      <table class="table table-bordered">
+          <thead>
+              <tr>
+                  <th>Nazwa produktu</th>
+                  <th>Jednostka</th>
+                  <th>Łączna ilość jednostek na stanie</th>
+                  <th>Łączna wartość netto[PLN]</th>
+                  <th>Łączna wartość brutto[PLN]</th>
+                  <!-- Add more headers for additional fields -->
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in lack_products %}
+                  <tr>
+                    <td>{{ item.product__name}}</td>
+                    <td>{{ item.product__unit}}</td>
+                    <td>{{ item.total_quantity }}</td>
+                    <td>{{ item.total_netto }}</td>
+                    <td>{{ item.total_brutto }}</td>
+                      <!-- Add more cells for additional fields -->
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+    <div class="col-md-8">
+    <h1>Magazyn</h1>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nazwa produktu</th>
-                <th>Kod kreskowy</th>
                 <th>Jednostka</th>
-                <th>Cena netto</th>
-                <th>Kategoria</th>
+                <th>Łączna ilość jednostek na stanie</th>
+                <th>Łączna wartość netto[PLN]</th>
+                <th>Łączna wartość brutto[PLN]</th>
                 <!-- Add more headers for additional fields -->
             </tr>
         </thead>
         <tbody>
             {% for item in data %}
                 <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.barcode }}</td>
-                    <td>{{ item.unit }}</td>
-                    <td>{{ item.price_netto }}</td>
-                    <td>{{ item.category }}</td>
+                  <td>{{ item.product__name}}</td>
+                  <td>{{ item.product__unit}}</td>
+                  <td>{{ item.total_quantity }}</td>
+                  <td>{{ item.total_netto }}</td>
+                  <td>{{ item.total_brutto }}</td>
                     <!-- Add more cells for additional fields -->
                 </tr>
             {% endfor %}
