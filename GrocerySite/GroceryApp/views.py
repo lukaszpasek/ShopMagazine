@@ -25,9 +25,9 @@ def indexProdukty(request):
 
 
 def indexSprzedaz(request):
-    period = request.GET.get('period', 'day')  # Default to daily
-    sort_by = request.GET.get('sort_by', 'date')  # Default to sorting by date
-    sort_order = request.GET.get('sort_order', 'asc')  # Default to ascending order
+    period = request.GET.get('period', 'day') 
+    sort_by = request.GET.get('sort_by', 'date')  
+    sort_order = request.GET.get('sort_order', 'asc')  
     date_field = 'sold_at'
 
     if period == 'day':
@@ -37,20 +37,19 @@ def indexSprzedaz(request):
     elif period == 'year':
         trunc_func = TruncYear
     else:
-        trunc_func = TruncDay  # Default to daily
+        trunc_func = TruncDay 
 
-    # Define the field to sort by
+ 
     if sort_by not in ['date', 'product__name', 'total_quantity', 'total_brutto', 'total_netto']:
         sort_by = 'date'
 
-    # Define the sort order
+
     if sort_order not in ['asc', 'desc']:
         sort_order = 'asc'
 
-    # Determine the order_by argument based on sort_order
+
     order_by_arg = f"{'' if sort_order == 'asc' else '-'}{sort_by}"
 
-    # Retrieve summary data
     summary_data = (
         Sales.objects
         .annotate(date=trunc_func(date_field))
@@ -64,7 +63,6 @@ def indexSprzedaz(request):
         .order_by(order_by_arg,'order_id')[:15]
     )
 
-    # Generate bar chart
     plt.figure(figsize=(10, 6))
     if period == 'day':
         labels = [item['date'].strftime('%Y-%m-%d') for item in summary_data]
@@ -95,15 +93,15 @@ def indexSprzedaz(request):
     plt.xlabel(f'Data ({period.capitalize()})')
     plt.ylabel('Sprzedaż brutto[PLN]')
 
-    # Save the plot to a BytesIO object
+
     image_stream = BytesIO()
     plt.savefig(image_stream, format='png')
     plt.close()
 
-    # Encode the image to base64
+
     image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
 
-    # Pass the base64-encoded image to the context
+
     context = {
         'sales_summary_data': summary_data,
         'period': period,
@@ -115,9 +113,9 @@ def indexSprzedaz(request):
     return render(request, 'indexSprzedaz.html', context)
 
 def indexDostawy(request):
-    period = request.GET.get('period', 'day')  # Default to daily
-    sort_by = request.GET.get('sort_by', 'date')  # Default to sorting by date
-    sort_order = request.GET.get('sort_order', 'asc')  # Default to ascending order
+    period = request.GET.get('period', 'day')  
+    sort_by = request.GET.get('sort_by', 'date')  
+    sort_order = request.GET.get('sort_order', 'asc') 
     date_field = 'ordered_at'
 
     if period == 'day':
@@ -127,20 +125,20 @@ def indexDostawy(request):
     elif period == 'year':
         trunc_func = TruncYear
     else:
-        trunc_func = TruncDay  # Default to daily
+        trunc_func = TruncDay  
 
-    # Define the field to sort by
+
     if sort_by not in ['date', 'product__name', 'total_quantity', 'total_brutto', 'total_netto']:
         sort_by = 'date'
 
-    # Define the sort order
+
     if sort_order not in ['asc', 'desc']:
         sort_order = 'asc'
 
-    # Determine the order_by argument based on sort_order
+
     order_by_arg = f"{'' if sort_order == 'asc' else '-'}{sort_by}"
 
-    # Retrieve summary data
+
     summary_data = (
         Delivery.objects
         .annotate(date=trunc_func(date_field))
@@ -153,7 +151,7 @@ def indexDostawy(request):
         .order_by(order_by_arg, 'product__name')
     )
 
-    # Generate bar chart
+
     plt.figure(figsize=(10, 6))
     if period == 'day':
         labels = [item['date'].strftime('%Y-%m-%d') for item in summary_data]
@@ -178,15 +176,15 @@ def indexDostawy(request):
     plt.xlabel(f'Data ({period.capitalize()})')
     plt.ylabel('Łączna wartość zamówienia brutto[PLN]')
 
-    # Save the plot to a BytesIO object
+
     image_stream = BytesIO()
     plt.savefig(image_stream, format='png')
     plt.close()
 
-    # Encode the image to base64
+
     image_base64 = base64.b64encode(image_stream.getvalue()).decode('utf-8')
 
-    # Pass the base64-encoded image to the context
+
     context = {
         'sales_summary_data': summary_data,
         'period': period,
@@ -200,7 +198,7 @@ def indexDostawy(request):
 def indexMagazyn(request):
     data = []
 
-    # Retrieve summary data
+
     summary_data = (
         TakeProduct.objects
         .values('product__name','quantity','product__unit','product__price_netto','product__price_brutto')
@@ -233,7 +231,7 @@ def indexDashboard(request):
 
     category_sums = defaultdict(int)
 
-    # Iteruj przez produkty w queryset i sumuj ilości dla każdej kategorii
+
     for product in queryset:
         if product.product.category is not None:
             category_sums[product.product.category] += product.quantity
@@ -244,7 +242,7 @@ def indexDashboard(request):
     labels = list(category_sums.keys())
     data = list(category_sums.values())
 
-    # Przekształć etykiety i dane na strukturę JSON
+
     labels_json = json.dumps(labels)
     data_json = json.dumps(data)
 

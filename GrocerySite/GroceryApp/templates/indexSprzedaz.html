@@ -31,7 +31,6 @@
           <option value="day" {% if period == 'day' %}selected{% endif %}>Dzień</option>
           <option value="month" {% if period == 'month' %}selected{% endif %}>Miesiąc</option>
           <option value="year" {% if period == 'year' %}selected{% endif %}>Rok</option>
-          <!-- Add more options as needed -->
         </select>
         <label for="sort_by">Sortuj według:</label>
         <select name="sort_by" id="sort_by">
@@ -58,7 +57,6 @@
                   <th>Łączna ilość sprzedanych produktów</th>
                   <th>Łączna sprzedaż netto[PLN]</th>
                   <th>Łączna sprzedaż brutto[PLN]</th>
-                  <!-- Add more headers for additional fields -->
               </tr>
           </thead>
           <tbody>
@@ -77,7 +75,6 @@
                       <td>{{ item.total_quantity }}</td>
                       <td>{{ item.total_netto }}</td>
                       <td>{{ item.total_brutto }}</td>
-                      <!-- Add more cells for additional fields -->
                   </tr>
               {% endfor %}
           </tbody>
