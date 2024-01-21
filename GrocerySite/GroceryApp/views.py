@@ -7,6 +7,8 @@ from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 import json
 from django.http import JsonResponse
 from io import BytesIO
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import base64
 
