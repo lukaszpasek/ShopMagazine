@@ -1,0 +1,7 @@
+-- Przykładowe dodanie losowych danych do tabeli api_sales
+INSERT INTO public.api_sales (quantity, sold_at, product_id)
+SELECT
+    FLOOR(RANDOM() * 10) + 1 as quantity,  -- Losowa ilość (1-10)
+    NOW() - INTERVAL '1' YEAR * RANDOM() as sold_at,  -- Losowa data w ciągu ostatniego roku
+    FLOOR(RANDOM() * 5) + 1 as product_id  -- Losowy product_id (1-5)
+FROM generate_series(1, 100);  -- Dodaj 100 losowych rekordów (dostosuj ilość według potrzeb)

@@ -12,6 +12,7 @@ class Product(models.Model):
             return self.name
 
 class Sales(models.Model):
+        id = models.AutoField(primary_key=True)
         product = models.ForeignKey(Product, on_delete=models.CASCADE)
         quantity = models.IntegerField()
         sold_at = models.DateTimeField(auto_now_add=True)

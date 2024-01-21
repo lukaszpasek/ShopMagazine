@@ -54,13 +54,14 @@ def indexSprzedaz(request):
     summary_data = (
         Sales.objects
         .annotate(date=trunc_func(date_field))
+        .annotate(order_id=F('id'))
         .values('date', 'product__name', 'product__price_netto', 'product__price_brutto')
         .annotate(
             total_quantity=Sum('quantity'),
             total_netto=Sum(F('quantity') * F('product__price_netto'), output_field=FloatField()),
             total_brutto=Sum(F('quantity') * F('product__price_brutto'), output_field=FloatField())
         )
-        .order_by(order_by_arg)
+        .order_by(order_by_arg,'order_id')[:15]
     )
 
     # Generate bar chart
@@ -74,15 +75,20 @@ def indexSprzedaz(request):
 
     total_brutto = [item['total_brutto'] for item in summary_data]
 
-    labels = labels[::-1]
-    total_brutto = total_brutto[::-1]
 
 
-    num_labels = min(len(labels), 7)
+    num_labels = 8
+
+    if(sort_order=='asc'):
+        labels = labels[:num_labels]
+        total_brutto = total_brutto[:num_labels]
+    else:
+        labels = labels[:num_labels]
+        total_brutto = total_brutto[:num_labels]
 
 
-    labels = labels[:num_labels][::-1]
-    total_brutto = total_brutto[:num_labels][::-1]
+
+
 
     plt.bar(labels, total_brutto, color='skyblue')
     plt.title(f'Sprzedaż brutto[PLN] w czasie z uwzględnieniem {period}')
