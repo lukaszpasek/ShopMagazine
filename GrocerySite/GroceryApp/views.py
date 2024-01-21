@@ -3,10 +3,11 @@ from api.models import Product, TakeProduct, Sales, Delivery
 from collections import defaultdict
 from django.db.models import Sum, F, FloatField
 from django.db.models.functions import TruncDay, TruncMonth, TruncYear
-
-import json
+from datetime import datetime
 from django.http import JsonResponse
 from io import BytesIO
+
+import json
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -60,10 +61,12 @@ def indexSprzedaz(request):
             total_netto=Sum(F('quantity') * F('product__price_netto'), output_field=FloatField()),
             total_brutto=Sum(F('quantity') * F('product__price_brutto'), output_field=FloatField())
         )
-        .order_by(order_by_arg,'order_id')[:15]
+        .order_by(order_by_arg)[:15]
     )
 
     plt.figure(figsize=(10, 6))
+
+
     if period == 'day':
         labels = [item['date'].strftime('%Y-%m-%d') for item in summary_data]
     elif period == 'month':
@@ -75,17 +78,20 @@ def indexSprzedaz(request):
 
 
 
+    data_pairs = list(zip(labels, total_brutto))
+
+    data_pairs.sort(key=lambda x: datetime.strptime(x[0], '%Y-%m-%d'))
+
+    labels, total_brutto = zip(*data_pairs)
+
     num_labels = 8
 
-    if(sort_order=='asc'):
-        labels = labels[:num_labels]
-        total_brutto = total_brutto[:num_labels]
+    if(sort_order=='desc'):
+        labels = labels[::-1][:num_labels]
+        total_brutto = total_brutto[::-1][:num_labels]
     else:
         labels = labels[:num_labels]
         total_brutto = total_brutto[:num_labels]
-
-
-
 
 
     plt.bar(labels, total_brutto, color='skyblue')
@@ -245,6 +251,8 @@ def indexDashboard(request):
 
     labels_json = json.dumps(labels)
     data_json = json.dumps(data)
+
+    
 
     return render(request, 'indexDashboard.html', {'labels': labels_json, 'data': data_json})
 
